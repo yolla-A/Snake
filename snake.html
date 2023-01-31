@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Snake</title>
+</head>
+<body>
+
+   <canvas id="canvas" width="720" height="480"></canvas>
+
+    <script>
+
+        let canvas= document.getElementById('canvas');
+        let ctx=canvas.getContext('2d');
+
+        let rows=40;
+        let cols=40;
+
+        let cellWidth =canvas.width/ cols;
+        let cellHeight=canvas.height/ rows;
+
+        let food;
+        let foodCollected=false;
+        placeFood();
+
+        let snake=[{
+            x:10,
+            y:10
+        }];
+
+        let direction='LEFT';
+
+        draw();
+
+        setInterval(gameLoop,300);
+        document.addEventListener('keydown',keydown); //'keydown' is an event
+
+        function gameLoop(){
+            testGameOver();
+            if (foodCollected){
+                snake=[{
+                    x:snake[0].x,
+                    y:snake[0].y
+                }, ...snake];  //...  new element in null position to be added
+                foodCollected=false;
+            }
+
+            shiftSnake();
+            if(direction==='LEFT') {
+                snake[0].x--;
+            }
+            if(direction==='UP') {
+                snake[0].y--;
+            }
+            if(direction==='RIGHT') {
+                snake[0].x++;
+            }
+            if(direction==='DOWN') {
+                snake[0].y++;
+            }
+            if(snake[0].x===food.x && snake[0].y===food.y){
+                placeFood();
+                foodCollected=true;
+            }
+        }
+
+        function  testGameOver(){
+
+            let firstPart=snake[0];
+            let otherParts=snake.slice(1);
+            let duplicatePart= otherParts.find(part => part.x=== firstPart.x && part.y===firstPart.y);
+
+            if(duplicatePart ||
+                snake[0].x<0 ||
+                snake[0].x > cols-1 ||
+                snake[0].y<0 ||
+                 snake[0].y >rows-1){
+                placeFood();
+                snake=[{
+                    x:10,
+                    y:10
+                }]
+            }
+        }
+
+
+        function shiftSnake(){
+            for(let i= snake.length-1;i>0;i--){
+                const part= snake[i];  //const änderbar ,add references, we can directly the elements in the array modifying
+                const lastPart=snake[i-1];
+                part.x=lastPart.x;
+                part.y=lastPart.y; // possible without semicolon
+
+            }
+        }
+        function draw(){
+            ctx.fillStyle='black';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+
+
+            ctx.fillStyle='yellow';
+            addRect(food.x,food.y);
+
+
+            ctx.fillStyle='white';
+            snake.forEach(part => addRect(part.x,part.y));
+
+            requestAnimationFrame(draw);
+
+        }
+
+
+        function addRect(x,y){
+            ctx.fillRect(x * cellWidth, y * cellHeight,cellWidth -1,cellHeight -1);
+        }
+
+
+        function placeFood(){
+
+            let randomX=Math.floor(Math.random()* cols);
+            let randomY=Math.floor(Math.random()* rows);
+
+            food={
+                x:randomX,
+                y:randomY
+            }
+        }
+
+        alert('Snake..');
+
+        function keydown(e){
+            if(e.keyCode===37){
+                direction='LEFT';
+            }
+            if (e.keyCode===38){
+                direction='UP';
+            }
+            if (e.keyCode===39){
+                direction='RIGHT';
+            }
+            if(e.keyCode===40){
+                direction='DOWN';
+            }
+
+        }
+    </script>
+</body>
+</html>

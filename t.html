@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <canvas id="canvas2" width="720" height="720"></canvas>
+    <script>
+        let canvas=document.getElementById('canvas2');
+        let ctx=canvas.getContext('2d');
+
+        let rows;
+        let columns;
+
+        let food;
+        let speed;
+        let direction='LEFT';
+
+        let snake =[{
+            x:10,
+            y:10
+        }]
+
+        let cellWidth;
+        let cellHeight;
+
+        function play() {
+            rows=document.getElementById('rows').value;
+            columns=document.getElementById('columns').value;
+            speed=document.getElementById('speed').value;
+
+            cellWidth=canvas.width / columns;
+            cellHeight=canvas.height /rows;
+            draw();
+        }
+        function draw(){
+            ctx.fillStyle='gray';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+
+            ctx.fillStyle='red';
+            ctx.addRect
+        }
+    </script>
+</body>
+</html>
